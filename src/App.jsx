@@ -2,6 +2,9 @@ import React, { useEffect } from 'react'
 import LoadingState from './component/LoadingState'
 import ErrorState from './component/ErrorState'
 import SearchBar from './component/SearchBar'
+import FilterBar from './component/FilterBar'
+import MovieCard from './component/MovieCard'
+import MovieGrid from './component/MovieGrid'
 
 const App = () => {
   const [query, setQuery] = React.useState("")
@@ -55,6 +58,10 @@ const App = () => {
 
       const movieResponse = await fetch(url)
 
+      if (!movieResponse.ok) {
+        throw new Error("Network error")
+      }
+
       const data = await movieResponse.json()
 
       if(data.Response === "False"){
@@ -85,7 +92,7 @@ const App = () => {
     fetchMovies(query)
   }
 
-  const filteredMovies = [movies].filter((movie) => {
+  const filteredMovies = [...movies].filter((movie) => {
     if(genre === "All"){
       return true
     }
@@ -93,7 +100,7 @@ const App = () => {
     return movie.Genre?.includes(genre)
   }).sort((a, b) => {
     if(sortBy === "newest"){
-      return Number(b.Year) - Number(a.Year)
+      return Number(b.Year) - (a.Year)
     }
 
     if(sortBy === "oldest"){
@@ -107,34 +114,34 @@ const App = () => {
     return 0
   })
 
-  function handleSavedMovie(movie){
+  function handleSaveMovie(movie){
     const isSaved = savedMovies.some((savedMovie) => {
       return savedMovie.imdbID === movie.imdbID
     })
 
     if(isSaved){
-      const updatedMovie = savedMovies.filter((savedMovie) => {
+      const updatedMovies = savedMovies.filter((savedMovie) => {
         return savedMovie.imdbID !== movie.imdbID
       })
 
-      setSavedMovies(updatedMovie)
-    }else{
-      const updatedMovie = [...savedMovies, movie]
+      setSavedMovies(updatedMovies)
+    }else {
+      const updatedMovies = [...savedMovies, movie]
 
-      setSavedMovies(updatedMovie)
+      setSavedMovies(updatedMovies)
     }
   }
 
   function handleRemoveMovie(id){
-    const filteredMovies = savedMovies.filter((savedMovie) => {
+    const updatedMovies = savedMovies.filter((savedMovie) => {
       return savedMovie.imdbID !== id
     })
 
-    setSavedMovies(filteredMovies)
+    setSavedMovies(updatedMovies)
   }
 
-  function handleSelectedMovie(movie){
-    selectedMovie(movie)
+  function handleSelectMovie(movie){
+    setSelectedMovie(movie)
   }
 
   function handleCloseModal(){
@@ -143,9 +150,15 @@ const App = () => {
 
   return (
     <div>
-      <LoadingState />
-      <ErrorState />
-      <SearchBar query={query} onQueryChange={handleQueryChange} onSearch={fetchMovies} />
+      {/* <LoadingState />
+      <ErrorState /> */}
+      <p>{genre}</p>
+      <p>{sortBy}</p>
+      <p>{filteredMovies.length}</p>
+      <SearchBar query={query} onQueryChange={handleQueryChange} onSearch={handleSearch} />
+      <FilterBar genre={genre} sortBy={sortBy} onGenreChange={handleGenreChange} onSortChange={handleSortChange} />
+      {/* <MovieCard movie={movie} isSaved={handleSaveMovie} onSave={} onSelect={handleSelectMovie} /> */}
+      <MovieGrid movies={movies} savedIds={} onSave={handleSaveMovie} onSelect={handleSelectMovie} />
     </div>
   )
 }

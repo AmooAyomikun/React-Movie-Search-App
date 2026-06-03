@@ -1,8 +1,10 @@
 import React from 'react'
 
-const MovieCard = () => {
+const MovieCard = ({movie, isSaved, onSave, onSelect}) => {
   return (
-    <div>MovieCard</div>
+    <div>
+
+    </div>
   )
 }
 
