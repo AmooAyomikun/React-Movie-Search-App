@@ -5,6 +5,7 @@ import SearchBar from './component/SearchBar'
 import FilterBar from './component/FilterBar'
 import MovieCard from './component/MovieCard'
 import MovieGrid from './component/MovieGrid'
+import MovieModal from './component/MovieModal'
 
 const App = () => {
   const [query, setQuery] = React.useState("")
@@ -24,6 +25,7 @@ const App = () => {
   const [genre, setGenre] = React.useState("All")
   const [sortBy, setSortBy] = React.useState("")
   const [showSaved, setShowSaved] = React.useState(false)
+  const [totalResults, setTotalResults] = React.useState(0)
 
   function handleQueryChange(value){
     setQuery(value)
@@ -69,6 +71,7 @@ const App = () => {
       }
 
       setMovies(data.Search)
+      setTotalResults(Number(data.totalResults))
     }catch(error){
       setError(`Error: ${error.message}`);
     }
@@ -76,6 +79,16 @@ const App = () => {
     finally{
       setLoading(false)
     }
+  }
+
+  async function handleSelect(movie){
+    const apiKey = import.meta.env.VITE_OMDb_API
+    const selectUrl = `https://www.omdbapi.com/?apikey=${apiKey}&i=${movie.imdbID}&plot=full`
+    const response = await fetch(selectUrl)
+
+    const data = await response.json()
+
+    setSelectedMovie(data)
   }
 
   React.useEffect(() => {
@@ -148,6 +161,15 @@ const App = () => {
     setSelectedMovie(null)
   }
 
+  const savedIds = savedMovies.map((savedMovie) => {
+    return savedMovie.imdbID 
+  })
+
+  const isSaved = savedIds.includes(selectedMovie.id)
+  if(isSaved){
+    return true
+  }
+
   return (
     <div>
       {/* <LoadingState />
@@ -157,8 +179,8 @@ const App = () => {
       <p>{filteredMovies.length}</p>
       <SearchBar query={query} onQueryChange={handleQueryChange} onSearch={handleSearch} />
       <FilterBar genre={genre} sortBy={sortBy} onGenreChange={handleGenreChange} onSortChange={handleSortChange} />
-      {/* <MovieCard movie={movie} isSaved={handleSaveMovie} onSave={} onSelect={handleSelectMovie} /> */}
-      <MovieGrid movies={movies} savedIds={} onSave={handleSaveMovie} onSelect={handleSelectMovie} />
+      <MovieGrid movies={movies} savedIds={savedIds} onSave={handleSaveMovie} onSelect={handleSelectMovie} totalResults={totalResults} />
+      <MovieModal movie={selectedMovie} onSave={handleSaveMovie} isSaved={isSaved} onClose={handleCloseModal}  />
     </div>
   )
 }
