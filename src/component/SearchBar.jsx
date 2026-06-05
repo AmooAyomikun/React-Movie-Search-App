@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 const SearchBar = ({query, onQueryChange, onSearch}) => {
   function handleKeyDown(){
     if(event.key === "Enter"){
-      return onSearch
+      onSearch()
     }
   }
   return (

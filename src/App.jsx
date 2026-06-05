@@ -6,6 +6,10 @@ import FilterBar from './component/FilterBar'
 import MovieCard from './component/MovieCard'
 import MovieGrid from './component/MovieGrid'
 import MovieModal from './component/MovieModal'
+import SavedMovies from './component/SavedMovies'
+import { faFilm } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBookmark } from '@fortawesome/free-solid-svg-icons'
 
 const App = () => {
   const [query, setQuery] = React.useState("")
@@ -26,6 +30,7 @@ const App = () => {
   const [sortBy, setSortBy] = React.useState("")
   const [showSaved, setShowSaved] = React.useState(false)
   const [totalResults, setTotalResults] = React.useState(0)
+  const [modalLoading, setModalLoading] = React.useState(false)
 
   function handleQueryChange(value){
     setQuery(value)
@@ -55,7 +60,6 @@ const App = () => {
 
     try{
       const apiKey = import.meta.env.VITE_OMDb_API
-      const searchedMovie = searchQuery
       const url = `https://www.omdbapi.com/?apikey=${apiKey}&s=${searchQuery}`
 
       const movieResponse = await fetch(url)
@@ -82,13 +86,23 @@ const App = () => {
   }
 
   async function handleSelect(movie){
-    const apiKey = import.meta.env.VITE_OMDb_API
-    const selectUrl = `https://www.omdbapi.com/?apikey=${apiKey}&i=${movie.imdbID}&plot=full`
-    const response = await fetch(selectUrl)
+    try{
+      const apiKey = import.meta.env.VITE_OMDb_API
+      const selectUrl = `https://www.omdbapi.com/?apikey=${apiKey}&i=${movie.imdbID}&plot=full`
+      setModalLoading(true)
+      const response = await fetch(selectUrl)
 
-    const data = await response.json()
+      const data = await response.json()
 
-    setSelectedMovie(data)
+      if(data.Response === "False"){
+        throw new Error(data.Error)
+      }
+      
+      setModalLoading(false)
+      setSelectedMovie(data)
+    }catch(error){
+      setError(error.message)
+    }
   }
 
   React.useEffect(() => {
@@ -97,7 +111,7 @@ const App = () => {
     }, 500)
 
     return () => {
-      clearInterval(timer)
+      clearTimeout(timer)
     }
   }, [query])
 
@@ -153,10 +167,6 @@ const App = () => {
     setSavedMovies(updatedMovies)
   }
 
-  function handleSelectMovie(movie){
-    setSelectedMovie(movie)
-  }
-
   function handleCloseModal(){
     setSelectedMovie(null)
   }
@@ -165,22 +175,67 @@ const App = () => {
     return savedMovie.imdbID 
   })
 
-  const isSaved = savedIds.includes(selectedMovie.id)
-  if(isSaved){
-    return true
-  }
-
+  const isSaved = selectedMovie ? savedIds.includes(selectedMovie.imdbID) : false
+  
   return (
-    <div>
-      {/* <LoadingState />
-      <ErrorState /> */}
-      <p>{genre}</p>
-      <p>{sortBy}</p>
-      <p>{filteredMovies.length}</p>
-      <SearchBar query={query} onQueryChange={handleQueryChange} onSearch={handleSearch} />
-      <FilterBar genre={genre} sortBy={sortBy} onGenreChange={handleGenreChange} onSortChange={handleSortChange} />
-      <MovieGrid movies={movies} savedIds={savedIds} onSave={handleSaveMovie} onSelect={handleSelectMovie} totalResults={totalResults} />
-      <MovieModal movie={selectedMovie} onSave={handleSaveMovie} isSaved={isSaved} onClose={handleCloseModal}  />
+    <div className='app'>
+      <div className="app-header">
+        <div className="left-header">
+          <FontAwesomeIcon icon={faFilm} />
+          <h1>CineSearch</h1>
+        </div>
+
+        <div className="right-header" onClick={handleToggleSaved}>
+          <FontAwesomeIcon icon={faBookmark} />
+          <h3>Saved movies</h3>
+          <span>{savedMovies.length}</span>
+        </div>
+      </div><hr />
+      <SearchBar 
+              query={query} 
+              onQueryChange={handleQueryChange} 
+              onSearch={handleSearch} 
+      />
+
+      {movies.length > 0 && <FilterBar 
+                genre={genre} 
+                sortBy={sortBy} 
+                onGenreChange={handleGenreChange} 
+                onSortChange={handleSortChange} 
+      />}
+
+      {loading ? 
+          <LoadingState/> 
+          : error ? 
+          <ErrorState message={error} /> :
+          movies.length === 0 ? <div className="empty-state">
+          <FontAwesomeIcon icon={faFilm} />
+          <h2>Search for a Movie</h2>
+          <p>
+            Find movies, view details, and build your watchlist.
+          </p>
+        </div> : 
+          <MovieGrid 
+                movies={filteredMovies} 
+                savedIds={savedIds} 
+                onSave={handleSaveMovie} 
+                onSelect={handleSelect} 
+                totalResults={totalResults} 
+          />
+        }
+
+      {selectedMovie &&<MovieModal 
+                movie={selectedMovie} 
+                onSave={handleSaveMovie} 
+                isSaved={isSaved} 
+                onClose={handleCloseModal}  
+      />}
+
+      {showSaved && <SavedMovies 
+                  movies={savedMovies} 
+                  onRemove={handleRemoveMovie} 
+                  onSelect={handleSelect} 
+      />}
     </div>
   )
 }

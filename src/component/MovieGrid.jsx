@@ -5,7 +5,7 @@ const MovieGrid = ({movies, savedIds, onSave, onSelect, totalResults}) => {
   return (
     <div>
       <div className="results-row">
-        <p>{totalResults} for found</p> 
+        <p>Showing {movies.length} of {totalResults} results</p> 
         
         <div className="view-toggle">
           <button>Grid</button>
