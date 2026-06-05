@@ -3,7 +3,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const SearchBar = ({query, onQueryChange, onSearch}) => {
-  function handleKeyDown(){
+  function handleKeyDown(event){
     if(event.key === "Enter"){
       onSearch()
     }

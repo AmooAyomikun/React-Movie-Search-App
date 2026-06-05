@@ -1,20 +1,21 @@
 import React from 'react'
 import MovieCard from './MovieCard'
 
-const MovieGrid = ({movies, savedIds, onSave, onSelect, totalResults}) => {
+const MovieGrid = ({movies, savedIds, onSave, onSelect, totalResults, viewMode, setViewMode}) => {
   return (
-    <div>
+    <div className="movie-container">
       <div className="results-row">
         <p>Showing {movies.length} of {totalResults} results</p> 
         
         <div className="view-toggle">
-          <button>Grid</button>
-          <button>List</button>
+          <button className={viewMode === "grid" ? "active-view" : ""} onClick={() => setViewMode("grid")}>Grid</button>
+          <button className={viewMode === "list" ? "active-view" : ""} onClick={() => setViewMode("list")}>List</button>
         </div>
       </div>
 
-      {movies.length === 0 ? <p>No result found</p> : 
-        <div className="movie-grid">
+      {movies.length === 0 ? 
+      <p>No results match your filter filters.</p> : 
+        <div className={viewMode === "grid" ? "movie-grid" : "movie-list"}>
           {movies.map((movie) => {
             const isSaved = savedIds.includes(movie.imdbID)
 
@@ -24,6 +25,7 @@ const MovieGrid = ({movies, savedIds, onSave, onSelect, totalResults}) => {
                   isSaved={isSaved} 
                   onSave={onSave} 
                   onSelect={onSelect} 
+                  viewMode={viewMode} 
                 />
           })}
         </div>

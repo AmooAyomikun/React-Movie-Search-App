@@ -32,6 +32,46 @@ body{
   min-height: 100vh;
 }
 
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.left-header, .right-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.right-header {
+  cursor: pointer;
+  background: var(--surface);
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  transition: background 0.2s;
+}
+
+.right-header:hover {
+  background: var(--card);
+}
+
+.right-header span {
+  background: var(--primary);
+  padding: 0.2rem 0.6rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
 .loader {
   width: 48px;
   height: 48px;
@@ -160,6 +200,62 @@ body{
   margin-bottom: 2rem;
 }
 
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.movie-grid.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.movie-grid.list .movie-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: #1a1a1a;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+  height: 140px; 
+}
+
+.movie-grid.list .movie-card img {
+  width: 100px;
+  height: 100%;
+  object-fit: cover;
+}
+
+.movie-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.movie-list .movie-card {
+  display: flex;
+  flex-direction: row;
+  height: 160px;
+}
+
+.movie-list .poster {
+  width: 120px;
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.active-view {
+  background: #8b5cf6;
+  color: white;
+}
+
 .results-row p{
   color: #94a3b8;
   font-size: 0.95rem;
@@ -182,12 +278,6 @@ body{
 
 .view-toggle button:hover {
   background: #334155;
-}
-
-.movie-grid{
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 1.5rem;
 }
 
 .movie-card{
@@ -298,17 +388,17 @@ body{
   -webkit-backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* MOBILE: Allows the whole modal to scroll on small screens if it's taller than the phone */
+  align-items: flex-start;
   padding: 2rem 1rem;
   z-index: 1000;
-  overflow-y: auto; /* Outer window scroll only if content exceeds device screen */
+  overflow-y: auto; 
   animation: fadeIn 0.25s ease-out;
 }
 
 .modal-card {
   position: relative;
   width: min(850px, 100%);
-  height: auto; /* NO SCROLL FIX: Let the card expand naturally based on content */
+  height: auto; 
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 16px;
@@ -346,7 +436,7 @@ body{
 
 .modal-poster {
   width: 100%;
-  height: 250px; /* Mobile poster aspect height */
+  height: 250px; 
   background: #111;
   overflow: hidden;
   border-bottom: 1px solid var(--border);
@@ -373,8 +463,8 @@ body{
   display: flex;
   flex-direction: column;
   padding: 1.5rem;
-  height: auto; /* NO SCROLL FIX: Removes internal text container boundaries */
-  overflow-y: visible; /* Disables the inner scrollbar completely */
+  height: auto; 
+  overflow-y: visible; 
   box-sizing: border-box;
 }
 
@@ -461,7 +551,7 @@ body{
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin-top: 1.5rem; /* Explicit structural spacing instead of pushing */
+  margin-top: 1.5rem; 
   padding-top: 1rem;
 }
 
@@ -509,9 +599,6 @@ body{
   color: var(--text);
 }
 
-/* ==========================================================================
-   2. WATCHLIST / SAVED MOVIES COMPONENT
-   ========================================================================== */
 .saved-movies {
   background: var(--card);
   border: 1px solid var(--border);
@@ -555,7 +642,6 @@ body{
   border-radius: 12px;
 }
 
-/* Base row style for mobile layout setup */
 .saved-row {
   display: flex;
   align-items: center;
@@ -581,8 +667,8 @@ body{
   overflow: hidden;
   background: #111;
   display: flex;
-  flex-items: center;
-  flex-shrink: 0; /* Keep poster structural layout fixed */
+  align-items: center;
+  flex-shrink: 0; 
 }
 
 .saved-thumb img {
@@ -601,21 +687,19 @@ body{
   font-size: 1.25rem;
 }
 
-/* Title text configuration */
 .saved-row p:nth-of-type(1) {
   font-weight: 600;
   color: var(--text);
   font-size: 0.95rem;
   line-height: 1.3;
   margin: 0;
-  flex: 1; /* Pushes meta-info naturally to the right */
+  flex: 1;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-/* Secondary meta labels description */
 .saved-row p:nth-of-type(2) {
   font-size: 0.85rem;
   color: var(--muted);
@@ -645,9 +729,6 @@ body{
   color: var(--error);
 }
 
-/* ==========================================================================
-   3. ANIMATION KEYFRAMES
-   ========================================================================== */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -658,9 +739,6 @@ body{
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* ==========================================================================
-   4. RESPONSIVE QUERIES & BREAKPOINTS
-   ========================================================================== */
 @media(max-width: 768px){
   .filter-bar {
     flex-direction: column;
@@ -673,10 +751,8 @@ body{
 
 @media (min-width: 768px) {
   .modal-card {
-    /* 1. Locks down side-by-side split ratios */
     grid-template-columns: 360px 1fr; 
     grid-template-rows: 1fr; 
-    /* 2. Enforces explicit card layout height boundaries */
     height: 80vh;
     max-height: 600px;
   }
@@ -684,19 +760,19 @@ body{
   .modal-poster {
     border-bottom: none;
     border-right: 1px solid var(--border);
-    height: 100%; /* Keeps poster matched to container height */
+    height: 100%; 
   }
 
   .modal-poster img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Keeps image beautifully framed with zero distorting stretch */
+    object-fit: cover; 
   }
 
   .modal-content {
     padding: 2.5rem;
     height: 100%;
-    overflow-y: auto; /* Adds a clean scroll track ONLY if text runs excessively long */
+    overflow-y: auto; 
     display: flex;
     flex-direction: column;
   }
@@ -707,7 +783,7 @@ body{
 
   .modal-actions {
     flex-direction: row;
-    margin-top: auto; /* Sticks actions neatly to the very bottom */
+    margin-top: auto; 
     background: var(--card);
   }
 
@@ -715,7 +791,6 @@ body{
     flex: 1;
   }
 
-  /* Safe grid breakdown for desktop widths */
   .saved-row {
     display: grid;
     grid-template-columns: 55px 2fr 1fr auto; 
@@ -737,4 +812,3 @@ body{
     font-size: 0.9rem;
   }
 }
-
