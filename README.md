@@ -1,16 +1,72 @@
-# React + Vite
+# Movie Search App
+A modern movie discovery platform built with React that allows users to search movies, explore detailed information, save favorites, and discover trending content through a fast and responsive user interface.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[Live Demo](#)
+|https://amooayomikun.github.io/React-Movie-Search-App/
 
-Currently, two official plugins are available:
+## Project Overview
+The Movie Search App is a React-based application that enables users to discover movies, access detailed information, and build a personalized watchlist.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The project was built to strengthen my understanding of API integration, asynchronous data fetching, component architecture, state management, and modern frontend development practices.
 
-## React Compiler
+The application consumes movie data from the TMDB API and presents it through a clean and responsive interface optimized for both desktop and mobile devices.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Key Features
 
-## Expanding the ESLint configuration
+### Movie Search
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Users can search movies by title and instantly receive matching results from the API.
+
+### Movie Details
+
+Each movie can be opened to view:
+
+- Overview
+- Release date
+- Ratings
+- Poster
+- Additional metadata
+
+### Watchlist System
+
+Users can save movies they are interested in and revisit them later.
+
+### Responsive Design
+
+The application adapts seamlessly across desktop, tablet, and mobile devices.
+
+### Real-Time API Integration
+
+Movie information is fetched dynamically from an external API, ensuring fresh and accurate data.
+
+## Technologies Used
+
+### Frontend
+
+- React
+- JavaScript (ES6+)
+- HTML5
+- CSS3
+
+### Development Tools
+
+- Vite
+- Git
+- GitHub
+
+### APIs
+
+- OMDB API
+
+## Lessons Learned
+
+Through this project I strengthened my understanding of:
+
+- API consumption
+- State management with React Hooks
+- Component-driven development
+- Responsive design principles
+- Error handling strategies
+- Frontend performance optimization
+
+This project also improved my ability to design applications from concept to deployment while maintaining clean and scalable code.
